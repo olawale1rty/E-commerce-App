@@ -1,0 +1,114 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Check Out Details{% endblock %}
+
+
+
+{% block container %}
+<br><br><br><br>
+
+  <!-- breadcrumb -->
+  <div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+      <a href="{% url 'web:web_index' %}" class="stext-109 cl8 hov-cl1 trans-04">
+        Home
+        <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+      </a>
+
+      <span class="stext-109 cl4">
+        Check Out Details
+      </span>
+    </div>
+  </div>
+    
+
+  <div class="container mt-5">
+    <h2 class="mb-3">Shipping Address > <span class="text-muted">Checkout</span></h2>
+    <div class="row">
+      <div class="col-md-9">
+       <div class="card mb-5" style="height: auto">
+         <div class="card-body">
+            <form method="POST">
+            {% csrf_token %}
+
+           {{ form | crispy}}
+            <button type="submit" class="btn btn-primary float-right">Next</button>
+            </form>
+         </div>
+       </div>
+        {% if savedAddress %}
+        <h4>Saved Address</h4>
+        <div class="card mb-5" style="height: auto">
+          <div class="card-body">
+            <p><b>FirstName :</b> {{ savedAddress.firstname }}</p>
+            <p><b>LastName :</b> {{ savedAddress.lastname }}</p>
+            <p><b>Address :</b> {{ savedAddress.address }}</p>
+            <p><b>City :</b> {{ savedAddress.city }}</p>
+            <p><b>Zipcode :</b> {{ savedAddress.zipcode }}</p>
+            <p><b>Landmark :</b> {{ savedAddress.landmark }}</p>
+          </div>
+          <div class="card-body">
+            <button class="btn btn-primary float-right" type="submit" onclick="payWithPaystack()"> Pay </button>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-md-3">
+        <div class="card" style="height: auto">
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              {% for item in order_items %}
+              <li class="list-group-item">{{ item.product.name }} x {{ item.quantity }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+             <div class="card-footer">
+              <span class="float-left"><b>Order Total</b></span>
+              <span class="float-right"><b>₦ {{ order_total | floatformat:2 }}</b></span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://js.paystack.co/v1/inline.js"></script> 
+  <script> 
+    function payWithPaystack() {
+      var handler = PaystackPop.setup({
+        key: '{{ key }}', // Replace with your public key
+        email: '{{ email }}',
+        amount: '{{ order_total }}' * 100, 
+        currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+        firstname: '{{ firstname }}',
+        lastname: '{{ lastname }}',
+        reference: '{{ id }}', // Replace with a reference you generated
+        callback: function(response) {
+          //this happens after the payment is completed successfully
+          var reference = response.reference;
+          alert('Payment complete! Reference: ' + reference);
+          // Make an AJAX call to your server with the reference to verify the transaction
+          var upload_url = '{% url "web:oderView" %}';
+
+          $.ajax({
+            url: '/site/verify_transaction/' + reference,
+            method: 'GET',
+            success: function (response) {
+              var a = JSON.parse(response);
+              // the transaction status is in response.data.status
+              if (a['data']['status'] == "success"){
+                alert('Thank you for your Orders');
+                window.location.href = upload_url;
+              }
+            }
+          });
+        },
+        onClose: function() {
+          alert('Transaction was not completed, window closed.');
+        },
+      });
+      handler.openIframe();
+    }
+  </script>
+
+{% endblock %}    

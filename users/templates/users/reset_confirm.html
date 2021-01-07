@@ -1,0 +1,22 @@
+{% extends "web/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %} Reset Confirm {% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/sign_up.css' %}">
+{% endblock %}
+{% block container %}
+<br><br>
+		<main>
+       		<form id="signup" method="POST">
+				{% csrf_token %}
+         		<legend>RESET PASSWORD</legend>
+
+          		{{ form }}
+
+            	<div class="btn-submit">
+            		<input type="submit" value="SUBMIT" />
+            	</div>	
+        	</form>
+    	</main>
+{% endblock %}

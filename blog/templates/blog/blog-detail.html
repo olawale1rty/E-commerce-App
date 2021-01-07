@@ -1,0 +1,234 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block container %}
+<br><br><br>
+	<!-- breadcrumb -->
+	<div class="container">
+		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+			<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+				Home
+				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+			</a>
+
+			<a href="{% url 'blog:blog_index' %}" class="stext-109 cl8 hov-cl1 trans-04">
+				Blog
+				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+			</a>
+
+			<span class="stext-109 cl4">
+				{{ article.title }}
+			</span>
+		</div>
+	</div>
+
+
+	<!-- Content page -->
+	<section class="bg0 p-t-52 p-b-20">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-lg-9 p-b-80">
+					<div class="p-r-45 p-r-0-lg">
+						<!--  -->
+						<div class="wrap-pic-w how-pos5-parent">
+							<img src="/assets/{{ article.articleimage_set.all.0.image_file }}" alt="IMG-BLOG">
+
+							<div class="flex-col-c-m size-123 bg9 how-pos5">
+								<span class="ltext-107 cl2 txt-center">
+									{{ article.upload_date | date:'d'}}
+								</span>
+
+								<span class="stext-109 cl3 txt-center">
+									{{ article.upload_date | date:'M Y'}}
+								</span>
+							</div>
+						</div>
+
+						<div class="p-t-32">
+							<span class="flex-w flex-m stext-111 cl2 p-b-19">
+								<span>
+									<span class="cl4">By</span> {{ article.author.name }} 
+									<span class="cl12 m-l-4 m-r-6">|</span>
+								</span>
+
+								<span>
+									{{ article.upload_date | date:'d M, Y' }}
+									<span class="cl12 m-l-4 m-r-6">|</span>
+								</span>
+
+								<span>
+									{% for category in article.categories.all %}{{ category.article_category }}, {% endfor%}
+									<span class="cl12 m-l-4 m-r-6">|</span>
+								</span>
+
+								<span>
+									{{ article.comment_set.all.count }} Comment{{ article.comment_set.all.count | pluralize }}
+								</span>
+							</span>
+							<h4 class="ltext-109 cl2 p-b-28">
+								{{ article.title }}
+							</h4>
+							{% for video in article.articlevideo_set.all %}
+							<video controls="controls" class="video-fluid">
+								<source src="/assets/{{ video.video_file }}" type="video/mp4" />
+								Ops! Your browser does not support this video file
+							</video>
+							<h5 class="mtext-113 cl2 p-b-12">
+								{{ video.caption }}
+							</h5>
+							{% endfor %}
+							{% for text in article.articletext_set.all %}
+							<h5 class="mtext-113 cl2 p-b-12">
+								{{ text.header }}
+							</h5>
+							<p class="stext-117 cl6 p-b-26">{{ text.text }}</p>
+							{% endfor %}
+							{% for image in article.articleimage_set.all %}
+							{% if forloop.counter == 1%}
+							{% else %}
+							<img src="/assets/{{ image.image_file }}" class="img-fluid">
+							<h5 class="mtext-113 cl2 p-b-12">
+								{{ image.caption }}
+							</h5>
+							{% endif %}
+							{% endfor %}
+							
+
+						</div>
+
+
+						<!--  -->
+						<div class="p-t-40">
+							<h5 class="mtext-113 cl2 p-b-12">
+								Leave a Comment
+							</h5>
+
+							<p class="stext-107 cl6 p-b-40">
+								Your email address will not be published. Required fields are marked *
+							</p>
+
+							<form method="POST" action="{% url 'blog:blog_comment' %}">
+								{% csrf_token %}
+								
+								<div class="bor19 m-b-20">
+									{{ comment_form.comment }}
+								</div>
+
+								<div class="bor19 size-218 m-b-20">
+									{{ comment_form.name }}
+								</div>
+
+								<div class="bor19 size-218 m-b-20">
+									{{ comment_form.email }}
+								</div>
+
+								<div class="bor19 size-218 m-b-30">
+									{{ comment_form.website }}
+								</div>
+
+								<button class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
+									Post Comment
+								</button>
+								<div class="bor19 m-b-20 invisible">
+									{{ comment_form.article }}
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4 col-lg-3 p-b-80">
+					<div class="side-menu">
+						<div class="bor17 of-hidden pos-relative">
+							<input class="stext-103 cl2 plh4 size-116 p-l-28 p-r-55" type="text" name="search" placeholder="Search">
+
+							<button class="flex-c-m size-122 ab-t-r fs-18 cl4 hov-cl1 trans-04">
+								<i class="zmdi zmdi-search"></i>
+							</button>
+						</div>
+
+						<div class="p-t-55">
+							<h4 class="mtext-112 cl2 p-b-33">
+								Article Categories
+							</h4>
+
+							<ul>
+								{% for category in blog_categories %}
+								<li class="bor18">
+									<a href="{% url 'blog:blog_category' category=category.article_category %}" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+										{{ category.get_article_category_display }}
+									</a>
+								</li>
+								{% endfor %}
+							</ul>
+						</div>
+
+						<div class="p-t-65">
+							<h4 class="mtext-112 cl2 p-b-33">
+								Featured Products
+							</h4>
+
+							<ul>
+								{% for product in article.featured_products.all %}
+								<li class="flex-w flex-t p-b-30">
+									<a href="{% url 'web:product_detail' slug=product.slug %}" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
+										<img src="/assets/{{ product.productphoto_set.all.0.image }}" alt="PRODUCT" class="img-fluid">
+									</a>
+
+									<div class="size-215 flex-col-t p-t-8">
+										<a href="{% url 'web:product_detail' slug=product.slug %}" class="stext-116 cl8 hov-cl1 trans-04">
+											{{ product.name }}
+										</a>
+
+										<span class="stext-116 cl6 p-t-20">
+											<del style="color: red;">{{ product.sale_currency }}{{ product.unit_price }}</del><span> {{ product.sale_currency }}{{ product.unit_discount_price }}</span>
+										</span>
+									</div>
+								</li>
+								{% endfor %}
+							</ul>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="container">
+			<div class="p-t-7">
+					<!-- Comments --><div><h3>{{ comments.count }} Comment{{ comments.count | pluralize }}</h3></div>
+										{% for comment in comments %}
+										<div class="flex-w flex-t p-b-20">
+											<div class="size-207">
+												<div class="flex-w flex-sb-m p-b-17">
+													<span class="mtext-107 cl2 p-r-20">
+														{{ comment.name }}
+													</span>
+
+													<span class=" cl1">
+														<i>{{ comment.upload_timestamp |date:'d M, Y'}} at {{ comment.upload_timestamp |date:'g:i a'}}</i>
+													</span>
+												</div>
+
+												<p class="stext-102 cl6">
+													{{ comment.comment }}
+												</p>
+											</div>
+										</div>
+										{% endfor %}
+
+				</div>
+		</div>
+	</section>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	{% if form_status == 'success' %}
+	setTimeout(swal('Success Message', "Your comment has been successfully posted. Thanks for your generosity", "success"), 500)
+	{% endif %}
+	{% if form_status == 'fail' %}
+	setTimeout(swal('Error Message', "An error occured while trying to post your comment. Please try again\nWe dearly appologize for the incovenience", "danger"), 500)
+	{% endif %}
+</script>
+{% endblock %}

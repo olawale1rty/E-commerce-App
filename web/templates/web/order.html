@@ -1,0 +1,68 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Order{% endblock %}
+
+
+
+{% block container %}
+<br><br><br><br>
+
+  <!-- breadcrumb -->
+  <div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+      <a href="{% url 'web:web_index' %}" class="stext-109 cl8 hov-cl1 trans-04">
+        Home
+        <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+      </a>
+
+      <span class="stext-109 cl4">
+        Order
+      </span>
+    </div>
+  </div>
+    
+  <div class="container mt-5">
+	<h2 class="text-center"><strong>Your Orders</strong></h2>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card mt-5" style="height: auto">
+				<div class="table-responsive">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">Order Id</th>
+				      <th scope="col">Products</th>
+				      <th scope="col">Status</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    
+				    
+				    {% for order in orders %}
+				    <tr>
+				      <th scope="row">{{ forloop.counter }}</th>
+				      <td><a href="#">{{ order.orderId }}</a></td>
+				      <td>
+				      	{% for item in order.orderitems.all %}
+				      		{{ item }}
+				      		<br>
+				      	{% endfor %}
+				      </td>
+				      <td><span class="badge badge-primary">Processing Your Order</span></td>
+				  	</tr>
+				      {% endfor %}
+				    
+				  </tbody>
+				</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 my-5 text-center">
+			<a href="{% url 'web:web_index' %}" class="btn btn-success">Back to Home</a>
+		</div>
+	</div>
+	</div>
+
+{% endblock %}    

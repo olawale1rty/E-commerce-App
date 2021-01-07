@@ -1,0 +1,36 @@
+{% extends 'web/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}{{ site_details.name }} | Profile {% endblock %}
+{% block style %}
+<link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/profile.css' %}">
+{% endblock %}
+{% block container %}
+<br><br>
+    <div class="user_profile d-flex justify-content-between">
+        <div class="d-flex profile_card-right">
+            {% if object.avatar %}
+            <div class="profile_img_cover">
+                <img src="{{ object.avatar.url }}" alt="">
+            </div>
+            {% endif %}
+            <div class="ml-lg-4 ml-md-3 ml-sm-2 ml-1">
+                <h6 class="profile_name">{{ object.username }}</h6>
+                <p class="membership">Membership Since : <span>{{ object.date_joined }}</span></p>
+                <p class="profile_details">Email: {{ object.email }}</p>
+                {% if object.social_handle %}
+                <p class="profile_details">Twitter: <a href="https://twitter.com/{{ object.social_handle }}" target="_blank">{{ object.social_handle }}</a></p>
+                {% endif %}
+                {% if object.bio %}
+                 <p class="profile-details">Bio: {{ object.bio }}</p>
+                {% endif%}
+            </div>
+        </div>
+        {% if user == object %}
+        <div>
+            <a href="{% url 'users:edit' %}"><i class='bx bxs-cog'></i></a>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

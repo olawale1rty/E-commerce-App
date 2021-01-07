@@ -1,0 +1,92 @@
+/* ==================================================== */
+/* =============== USER PROFILE STYLES ================ */
+/* ==================================================== */
+.user_profile {
+    padding: 2rem 5rem;
+}
+.profile_card-right {
+    align-items: flex-end;
+}
+.profile_img_cover {
+    width: 35%;
+}
+.profile_name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-gray);
+}
+.membership {
+    font-size: 0.8rem;
+    color: var(--lighter-gray);
+    margin-bottom: 0.6rem;
+}
+.profile_details {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+@media screen and (max-width: 768px) {
+    .user_profile {
+        padding: 1.7rem 4rem;
+    }
+    .profile_img_cover {
+        width: 32%;
+    }
+    .profile_name {
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+    .membership {
+        font-size: 0.7rem;
+        margin-bottom: 0.4rem;
+    }
+    .profile_details {
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+    }
+}
+
+@media screen and (max-width: 568px) {
+    .user_profile {
+        padding: 1.5rem 3rem;
+    }
+    .profile_card-right {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .profile_img_cover {
+        width: 52%;
+        margin-bottom: 1rem;
+    }
+    .profile_name {
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+    .membership {
+        font-size: 0.7rem;
+        margin-bottom: 0.4rem;
+    }
+    .profile_details {
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+    }
+}
+@media screen and (max-width: 468px) {
+    .user_profile {
+        padding: 3rem 1.5rem;
+    }
+    .profile_img_cover {
+        width: 72%;
+        margin-bottom: 2rem;
+    }
+    .profile_name {
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+    .membership {
+        font-size: 0.65rem;
+    }
+    .profile_details {
+        font-size: 0.8rem;
+    }
+}

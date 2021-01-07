@@ -1,0 +1,47 @@
+{% extends 'web/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}{{ site_details.name }} | Update Profile {% endblock %}
+{% block style %}
+<link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/profile.css' %}">
+{% endblock %}
+{% block container %}
+<br><br>
+   <div class="user_profile d-flex justify-content-between">
+        <div class="d-flex profile_card-right">
+            <div class="profile_img_cover">
+                <img src="{{ user.avatar.url }}" alt="">
+            </div>
+            <div class="ml-lg-4 ml-md-3 ml-sm-2 ml-1">
+                <h6 class="profile_name">{{ user.username }}</h6>
+                <p class="membership">Membership Since : <span>{{ user.date_joined }}</span></p>
+                <p class="profile_details">Email: {{ user.email }}</p>
+                {% if user.social_handle %}
+                <p class="profile_details">Twitter: <a href="https://twitter.com/{{ user.social_handle }}" target="_blank">{{ user.social_handle }}</a></p>
+                {% endif %}
+                {% if user.bio %}
+                 <p class="profile-details">Bio: {{ user.bio }}</p>
+                {% endif%}
+            </div>
+        </div>
+    </div>
+       <div class="container-fluid">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-md-8 col-sm-12">
+                <form method="POST" action="" enctype="multipart/form-data" class="mt-5">
+        <legend class="border-bottom mb-4">Edit Profile</legend>
+            {% csrf_token %}
+            <fieldset class="form-group">
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Save</button>
+            </div>
+        </form>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'web/base.html' %}
+{% block title %}Update Cart{% endblock %}
+
+
+{% block container %}
+<br><br><br><br>
+<div class="container">
+	<div class="alert alert-danger">To update the quantity of a product in your cart, click on the product from your cart, change the quatity from <i>1 the default</i> to the new desired quantity and add it to cart again. This page is mainly for removing products you no longer need at this time of purchase. We dearly appologize for the inconvenience.</div>
+</div>
+<div class="container">
+	<div class="alert alert-info">Deselect the product you no longer need.</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col col-md-4"></div>
+		<div class="col col-md-4">
+			<form method="POST" action="{% url 'web:update_cart' %}">
+		{% csrf_token %}
+		<div class="form-group">{{ cart_form.cart_id }}</div>
+		<div class="form-group">{{ cart_form.cart_products }}</div>
+		<div class="form-group"><button type="submit" class="cl1 form-control">Update Cart</button></div>
+	</form>
+		</div>
+		<div class="col col-md-4"></div>
+	</div>
+</div>
+{% endblock %}

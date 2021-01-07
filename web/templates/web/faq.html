@@ -1,0 +1,57 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block title %}{{ site_details.name }} | FAQs{% endblock %}
+{% block container %}
+<br><br><br>
+<!-- breadcrumb -->
+	<div class="container">
+		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+			<a href="{% url 'web:web_index' %}" class="stext-109 cl8 hov-cl1 trans-04">
+				Home
+				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+			</a>
+			<span class="stext-109 cl4">
+				Frequently Asked Questions
+			</span>
+		</div>
+	</div>
+	<div class="p-b-10 container">
+				<h3 class="ltext-103 cl5">
+					Frequently Asked Questions
+				</h3>
+			</div>
+
+
+			<div class="infinite-container container">
+	 {% if faqs %}
+    {% for faq in faqs %}
+      <div class="infinite-item">
+      	<div class="m-t-8"><h4 class="cl1">{{ faq.question }}</h4><p>{{ faq.answer }}</p></div>
+      </div>
+    {% endfor %}
+    {% endif %}
+	</div>
+
+			<!-- Load more -->
+			<div class="loading">
+    			<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+					Fetching More <span> <img src="{% static 'web/images/preloader.gif' %}"></span>
+				</a>
+  			</div>
+  			{% if faqs.has_next %}
+    		<a class="infinite-more-link" href="?page={{ faqs.next_page_number }}">More</a>
+  			{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      onBeforePageLoad: function () {
+        $('.loading').show();
+      },
+      onAfterPageLoad: function ($items) {
+        $('.loading').hide();
+      }
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "web/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}{{ site_details.name }} | Signup {% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/sign_up.css' %}">
+{% endblock %}
+{% block container %}
+<br><br>
+    <main>
+        <form id="login" method="POST" action="">
+            {% csrf_token %}
+            <legend>Sign Up</legend>
+                {{ form|crispy }}
+            <div class="btn-submit">
+                <input type="submit" value="SIGN UP" />
+            </div>
+            <span class="terms"
+              >By registering, you accept our
+              <a href="http://">terms and conditions</a>
+            </span>
+            <div class="signin">
+              <p>ALREADY HAVE AN ACCOUNT?</p>
+              <p>CLICK HERE TO <a href="{% url 'users:login' %}" id="signuplink">SIGN IN</a></p>
+            </div>
+        </form>
+    </main>
+{% endblock %}

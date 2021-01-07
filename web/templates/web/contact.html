@@ -1,0 +1,129 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block title %}{{ site_details.name }} | contact{% endblock %}
+{% block container %}
+	<!-- Title page -->
+	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({% static 'web/images/contacts.jpg' %});">
+		<h2 class="ltext-105 cl0 txt-center">
+			Contact
+		</h2>
+	</section>	
+
+
+	<!-- Content page -->
+	<section class="bg0 p-t-104 p-b-116">
+		<div class="container">
+			<div class="flex-w flex-tr">
+				<div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+					<form method="POST" action="{% url 'web:new_client' %}">
+						<h4 class="mtext-105 cl2 txt-center p-b-30">
+							Send Us A Message
+						</h4>
+						{% csrf_token %}
+						<div class="bor8 m-b-20 how-pos4-parent">
+							{{ client_form.name }}
+						</div>
+						<div class="bor8 m-b-20 how-pos4-parent">
+							{{ client_form.email }}
+							<img class="how-pos4 pointer-none" src="{% static 'web/images/icons/icon-email.png' %}" alt="ICON">
+						</div>
+
+						<div class="bor8 m-b-30">
+							{{ client_form.message }}
+						</div>
+
+						<button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer" type="submit">
+							Submit
+						</button>
+					</form>
+				</div>
+
+				<div class="size-210 bor10 flex-w flex-col-m p-lr-93 p-tb-30 p-lr-15-lg w-full-md">
+					<div class="flex-w w-full p-b-42">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-map-marker"></span>
+						</span>
+
+						<div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Address
+							</span>
+
+							<p class="stext-115 cl6 size-213 p-t-18">
+								{{ site_details.address }}
+							</p>
+						</div>
+					</div>
+
+					<div class="flex-w w-full p-b-42">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-phone-handset"></span>
+						</span>
+
+						<div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Lets Talk
+							</span>
+							{% for number in site_details.phonenumber_set.all %}
+						<p class="stext-115 cl1 size-213 p-t-18">{{ number.name }} on {{ number.phone_number }}</p>
+						{% endfor %}
+						</div>
+					</div>
+
+					<div class="flex-w w-full p-b-42">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr "></span>
+						</span>
+
+						<div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Socialize with us on
+							</span>
+
+							<p class="stext-115 cl1 size-213 p-t-18">
+								{% for social in site_details.sitesocial_set.all %}
+						<a href="{{ social.link }}" target="_blank" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-{{ social.social_media }}"></i>
+						</a>
+						{% endfor %}
+							</p>
+						</div>
+					</div>
+
+					<div class="flex-w w-full">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-envelope"></span>
+						</span>
+
+						<div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Sale Support
+							</span>
+
+							<p class="stext-115 cl1 size-213 p-t-18">
+								{{ site_details.site_email }}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>	
+	
+	
+	<!-- Map -->
+	<div class="map">
+		<div class="size-303" id="google_map" data-map-x="40.691446" data-map-y="-73.886787" data-pin="images/icons/pin.png" data-scrollwhell="0" data-draggable="1" data-zoom="11"></div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	{% if form_status == 'success' %}
+	setTimeout(swal('Success Message', "Your message has been successfully sent. We'll get back to you shortly", "success"), 500)
+	{% endif %}
+	{% if form_status == 'fail' %}
+	setTimeout(swal('Error Message', "An error occured while trying to send your message\nPlease try again\nWe dearly appologize for the incovenience", "danger"), 500)
+	{% endif %}
+</script>
+{% endblock %}
